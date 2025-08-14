@@ -2,7 +2,7 @@ services:
   # ---- Frontend (Static Site) ----
   - type: web
     runtime: static
-    name: salex-frontend
+    name: XAI-frontend
     buildCommand: cd web && npm ci && npm run build
     staticPublishPath: web/dist
     routes:
@@ -13,7 +13,7 @@ services:
   # ---- Backend (Flask Web Service) ----
   - type: web
     runtime: python
-    name: salex-api
+    name: XAI-api
     plan: free
     buildCommand: pip install -r api/requirements.txt
     startCommand: cd api && gunicorn server:app -b 0.0.0.0:$PORT -w 2
