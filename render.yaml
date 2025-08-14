@@ -1,14 +1,14 @@
 services:
-  # ---- Frontend (Static Site) ----
   - type: web
     runtime: static
-    name: XAI-frontend
-    buildCommand: cd web && npm ci && npm run build
+    name: salex-frontend
+    buildCommand: cd web && npm install && npm run build   # ← 这里改了
     staticPublishPath: web/dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
+
 
   # ---- Backend (Flask Web Service) ----
   - type: web
