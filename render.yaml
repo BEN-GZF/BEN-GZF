@@ -1,7 +1,7 @@
 services:
   - type: web
     runtime: static
-    name: salex-frontend
+    name: XAI-frontend
     buildCommand: cd web && npm install && npm run build   # ← 这里改了
     staticPublishPath: web/dist
     routes:
