@@ -1,6 +1,7 @@
 services:
   # ---- Frontend (Static Site) ----
-  - type: static_site
+  - type: web
+    runtime: static
     name: salex-frontend
     buildCommand: cd web && npm ci && npm run build
     staticPublishPath: web/dist
@@ -11,19 +12,18 @@ services:
 
   # ---- Backend (Flask Web Service) ----
   - type: web
+    runtime: python
     name: salex-api
-    env: python
     plan: free
     buildCommand: pip install -r api/requirements.txt
     startCommand: cd api && gunicorn server:app -b 0.0.0.0:$PORT -w 2
-    autoDeploy: true
     envVars:
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: FRONTEND_ORIGIN
-        value: "*"   # 先调通；上线后改成你的前端域名
+        value: "*"
     buildFilter:
       paths:
         - api/**
