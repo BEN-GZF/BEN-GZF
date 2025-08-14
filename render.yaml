@@ -1,4 +1,5 @@
 services:
+  # ---- Frontend (Static Site) ----
   - type: web
     runtime: static
     name: XAI-frontend
@@ -7,6 +8,10 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
 
   # ---- Backend (Flask Web Service) ----
   - type: web
@@ -21,7 +26,4 @@ services:
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: FRONTEND_ORIGIN
-        value: "*"
-    buildFilter:
-      paths:
-        - api/**
+        value: "*"   # 先调通，成功后改成你的前端域名
