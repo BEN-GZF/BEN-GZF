@@ -1,17 +1,21 @@
 services:
-  - type: static
+  # ---- Frontend (Static Site) ----
+  - type: static_site
     name: salex-frontend
-    env: static
-    buildCommand: npm ci && npm run build
+    buildCommand: cd web && npm ci && npm run build
     staticPublishPath: web/dist
-    # 部署后，在仪表盘里设置 SPA Rewrite: /* -> /index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
 
+  # ---- Backend (Flask Web Service) ----
   - type: web
     name: salex-api
     env: python
     plan: free
     buildCommand: pip install -r api/requirements.txt
-    startCommand: gunicorn server:app -b 0.0.0.0:$PORT -w 2
+    startCommand: cd api && gunicorn server:app -b 0.0.0.0:$PORT -w 2
     autoDeploy: true
     envVars:
       - key: SUPABASE_URL
@@ -19,8 +23,7 @@ services:
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: FRONTEND_ORIGIN
-        # 第一次可以先用 * 调通；上线后改成你的前端域名（https://salex-frontend.onrender.com 或自定义域）
-        value: "*"
+        value: "*"   # 先调通；上线后改成你的前端域名
     buildFilter:
       paths:
         - api/**
